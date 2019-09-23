@@ -7,64 +7,117 @@
 <body>
     <h1> Crossy Avenue </h1>
     <canvas id="gameCanvas" width="600" height="800"></canvas>
-    <h2> Controls </h2>
-    <ul>
-        <li> W = Forward</li>
-        <li> A = Left</li>
-        <li> S = Down</li>
-        <li> D = Right</li>
-    </ul>
+  
 
 
     <script>
         var canvas, canvasContext;
 
+        window.onload = function() {
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+            
+            document.addEventListener('keydown', keyPressed);
+            document.addEventListener('keyup', keyReleased);
+
+            setInterval(mainloop, 1000 / 50);
+            
+        
+        }
+        
         //Player Variables
         var playerXpos = 300;
         var playerYpos = 0;
         var playerSize = 20;
         var playerXspeed = 2;
         var playerYspeed = 2;
-
-
-        //Sprite Variables
-        var playerSxPos = 0;
-        var playerSyPos = 0;
-        const PLAYER_S_WIDTH = 200;
-        const PLAYER_S_HEIGHT = 200;
-        var playerDxPos = 300;
-        var playerDyPos = 750;
-        var playerDwidth = 170;
-        var playerDheight = 175;
-
-        var playerSpriteXY = [];
-        var playerImgTotal = 16;
-        var rowCount = 0
+        
+        
+        const LEFT_KEY = 37;
+        const UP_KEY = 38;
+        const RIGHT_KEY = 39;
+        const DOWN_KEY = 40;
+        var leftKeyPressed = false;
+        var upKeyPressed = false;
+        var rightKeyPressed = false;
+        var downKeyPressed = false;
 
         var playerImg = new Image();
         playerImg.src = 'player.png'; //Sprite Image
         
         var bgImg = new Image();
         bgImg.src = 'Road.png';
-        
 
-        window.onload = function() {
-            canvas = document.getElementById('gameCanvas');
-            canvasContext = canvas.getContext('2d');
+        //Sprite Variables
+        var playerSxPos = 0;
+        var playerSyPos = 0;
+        const PLAYER_S_WIDTH = 37;
+        const PLAYER_S_HEIGHT = 48;
+        var playerDxPos = 0;
+        var playerDyPos = 0;
+        var playerDwidth = 40;
+        var playerDheight = 50;
 
-            setInterval(mainloop, 1000 / 50);
-        
-        }
+        var playerSpritesheetXY = [];
+        var playerImgTotal = 16;
+        var rowCount = 0
+
 
         function mainloop() { // loop runs code 50 times per second 
             colorRect(0, 0, canvas.width, canvas.height, 'black'); //background
             drawImg(bgImg, 0, 0, 600, 800, 0, 0, canvas.width, canvas.height);
-            drawImg(
-                playerImg, playerSxPos, playerSyPos, PLAYER_S_WIDTH, PLAYER_S_HEIGHT,
-                playerDxPos, playerDyPos, playerDwidth, playerDheight);
+            drawImg(playerImg, playerSxPos, playerSyPos, PLAYER_S_WIDTH, PLAYER_S_HEIGHT,playerDxPos, playerDyPos, playerDwidth, playerDheight);
+            
+            playerMove();
         }
 
 
+        
+        function playerMove(){
+           if(rightKeyPressed){
+              playerDxPos += playerXspeed;
+            }
+            if(leftKeyPressed){
+               playerDxPos -= playerXspeed;
+            }
+            if(upKeyPressed){
+               playerDyPos -= playerYspeed;
+               }
+            if(downKeyPressed){
+               playerDyPos += playerYspeed;
+               }
+        }
+
+        function keyPressed(evt) {
+            if (evt.keyCode == LEFT_KEY) {
+                leftKeyPressed = true;
+            }
+            if (evt.keyCode == RIGHT_KEY) {
+                rightKeyPressed = true;
+            }
+            if (evt.keyCode == UP_KEY) {
+                upKeyPressed = true;
+            }
+            if (evt.keyCode == DOWN_KEY) {
+                downKeyPressed = true;
+            }
+        }
+
+        function keyReleased(evt) {
+            if (evt.keyCode == LEFT_KEY) {
+                leftKeyPressed = false;
+            }
+            if (evt.keyCode == RIGHT_KEY) {
+                rightKeyPressed = false;
+            }
+            if (evt.keyCode == UP_KEY) {
+                upKeyPressed = false;
+            }
+            if (evt.keyCode == DOWN_KEY) {
+                downKeyPressed = false;
+            }
+        }
+       
         function drawImg(img, sx, sy, sw, sh, dx, dy, dw, dh) {
             canvasContext.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
         }
@@ -73,7 +126,6 @@
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
         }
-        
         
     </script>
 
@@ -87,6 +139,7 @@
             text-shadow: 3px 3px black;
             color: ghostwhite;
         }
+        
 
     </style>
 </body>
