@@ -7,7 +7,7 @@
 <body>
     <h1> Crossy Avenue </h1>
     <canvas id="gameCanvas" width="600" height="800"></canvas>
-  
+
 
 
     <script>
@@ -16,23 +16,34 @@
         window.onload = function() {
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
-            
+
             document.addEventListener('keydown', keyPressed);
             document.addEventListener('keyup', keyReleased);
 
             setInterval(mainloop, 1000 / 50);
-            
-        
+
+
         }
-        
-        //Player Variables
+        var difficulty = prompt('Difficulty?', 'easy or hard?');
+
+        if (difficulty != 'easy' || difficulty != 'hard') {
+            var pass = false;
+            while (pass == false) {
+                difficulty = prompt('How hard?', 'easy')
+                if (difficulty == 'easy' || difficulty == 'hard') {
+                    pass = true;
+                }
+            }
+        }
+
+        //Player Variable 
         var playerXpos = 300;
         var playerYpos = 0;
         var playerSize = 20;
-        var playerXspeed = 2;
-        var playerYspeed = 2;
-        
-        
+        var playerXspeed = 4;
+        var playerYspeed = 4;
+
+
         const LEFT_KEY = 37;
         const UP_KEY = 38;
         const RIGHT_KEY = 39;
@@ -42,9 +53,7 @@
         var rightKeyPressed = false;
         var downKeyPressed = false;
 
-        var playerImg = new Image();
-        playerImg.src = 'player.png'; //Sprite Image
-        
+
         var bgImg = new Image();
         bgImg.src = 'Road.png';
 
@@ -52,40 +61,92 @@
         var playerSxPos = 0;
         var playerSyPos = 0;
         const PLAYER_S_WIDTH = 37;
-        const PLAYER_S_HEIGHT = 48;
+        const PLAYER_S_HEIGHT = 50;
         var playerDxPos = 0;
         var playerDyPos = 0;
         var playerDwidth = 40;
         var playerDheight = 50;
 
-        var playerSpritesheetXY = [];
-        var playerImgTotal = 16;
-        var rowCount = 0
+        //Animation Variables
+        var playerSpriteArray = [];
+        const PLAYER_SPRITES = 16;
+        var rowCount = 0;
+        var playerSpriteNum = 0;
+        var aniFrameRate = 0.1;
 
 
         function mainloop() { // loop runs code 50 times per second 
             colorRect(0, 0, canvas.width, canvas.height, 'black'); //background
             drawImg(bgImg, 0, 0, 600, 800, 0, 0, canvas.width, canvas.height);
-            drawImg(playerImg, playerSxPos, playerSyPos, PLAYER_S_WIDTH, PLAYER_S_HEIGHT,playerDxPos, playerDyPos, playerDwidth, playerDheight);
-            
+            drawImg(playerImg, playerSxPos, playerSyPos, PLAYER_S_WIDTH, PLAYER_S_HEIGHT, playerDxPos, playerDyPos, playerDwidth, playerDheight);
+
+            playerAnimation()
+
+
             playerMove();
         }
 
+        for (i = 0; i < PLAYER_SPRITES; i++) {
+            playerSpriteArray[i] = new Array(2);
 
-        
-        function playerMove(){
-           if(rightKeyPressed){
-              playerDxPos += playerXspeed;
+            playerSpriteArray[i][0] = PLAYER_S_WIDTH * (i % 4);
+            //console.log(playerSpriteArray[i][0]);
+
+            if (i != 0 && i % 4 == 0) {
+                rowCount++;
+
+                playerSpriteArray[i][1] = PLAYER_S_HEIGHT * rowCount;
+            } else {
+                playerSpriteArray[i][1] = PLAYER_S_HEIGHT * rowCount;
             }
-            if(leftKeyPressed){
-               playerDxPos -= playerXspeed;
+        }
+
+        function playerAnimation() {
+            playerSxPos = playerSpriteArray[Math.floor(playerSpriteNum)][0];
+            playerSyPos = playerSpriteArray[Math.floor(playerSpriteNum)][1];
+
+
+
+            if (playerSpriteNum > 15) {
+                playerSpriteNum = 0
             }
-            if(upKeyPressed){
-               playerDyPos -= playerYspeed;
-               }
-            if(downKeyPressed){
-               playerDyPos += playerYspeed;
-               }
+
+        }
+
+        var playerImg = new Image();
+        playerImg.src = 'player.png'; //Sprite Image
+
+        function playerMove() {
+
+            if (rightKeyPressed) {
+                if (playerSpriteNum < 4 || playerSpriteNum > 7) {
+                    playerSpriteNum = 4;
+                }
+                playerSpriteNum += aniFrameRate;
+                playerDxPos += playerXspeed;
+            }
+
+            if (leftKeyPressed) {
+                if (playerSpriteNum < 8 || playerSpriteNum > 11) {
+                    playerSpriteNum = 8;
+                }
+                playerSpriteNum += aniFrameRate;
+                playerDxPos -= playerXspeed;
+            }
+            if (upKeyPressed) {
+                if (playerSpriteNum < 12 || playerSpriteNum > 15) {
+                    playerSpriteNum = 12;
+                }
+                playerSpriteNum += aniFrameRate;
+                playerDyPos -= playerYspeed;
+            }
+            if (downKeyPressed) {
+                if (playerSpriteNum < 0 || playerSpriteNum > 3) {
+                    playerSpriteNum = 0;
+                }
+                playerSpriteNum += aniFrameRate;
+                playerDyPos += playerYspeed;
+            }
         }
 
         function keyPressed(evt) {
@@ -117,7 +178,11 @@
                 downKeyPressed = false;
             }
         }
-       
+
+
+
+
+
         function drawImg(img, sx, sy, sw, sh, dx, dy, dw, dh) {
             canvasContext.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
         }
@@ -126,7 +191,7 @@
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
         }
-        
+
     </script>
 
     <style>
@@ -139,7 +204,6 @@
             text-shadow: 3px 3px black;
             color: ghostwhite;
         }
-        
 
     </style>
 </body>
