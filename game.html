@@ -52,12 +52,19 @@
         var upKeyPressed = false;
         var rightKeyPressed = false;
         var downKeyPressed = false;
-
+        
+        //Image Sources and Variables
+        
+        var playerImg = new Image();
+        playerImg.src = 'player.png'; //Sprite Image
 
         var bgImg = new Image();
-        bgImg.src = 'Road.png';
+        bgImg.src = 'Road.png'; //BG Image
+        
+        var carImg = new Image();
+        carImg.src = 'car.png'; //Car Sprite Image
 
-        //Sprite Variables
+        //Player Sprite Variables
         var playerSxPos = 0;
         var playerSyPos = 0;
         const PLAYER_S_WIDTH = 37;
@@ -73,17 +80,40 @@
         var rowCount = 0;
         var playerSpriteNum = 0;
         var aniFrameRate = 0.1;
+        
+        //Car Sprite Variables
+        
+        var carSxpos = 0;
+        var carSypos = 0;
+        const CAR_S_WIDTH = 319;
+        const CAR_S_HEIGHT = 158;
+        var carDxpos = -110;
+        var carDypos = 54;
+        var carDwidth = 120;
+        var carDheight = 65;
+        var carXspeed = 5;
+        
+        var startingPos = 'true'
+       
+        
 
 
         function mainloop() { // loop runs code 50 times per second 
             colorRect(0, 0, canvas.width, canvas.height, 'black'); //background
             drawImg(bgImg, 0, 0, 600, 800, 0, 0, canvas.width, canvas.height);
             drawImg(playerImg, playerSxPos, playerSyPos, PLAYER_S_WIDTH, PLAYER_S_HEIGHT, playerDxPos, playerDyPos, playerDwidth, playerDheight);
+            drawImg(carImg, 0, 0, CAR_S_WIDTH, CAR_S_HEIGHT, carDxpos, carDypos, carDwidth, carDheight);
+           
+            if(startingPos){
+                startPos();
+                startingPos = false;
+            }
 
-            playerAnimation()
-
-
+            playerAnimation();
+            carMove();
             playerMove();
+            score();
+            
         }
 
         for (i = 0; i < PLAYER_SPRITES; i++) {
@@ -110,15 +140,12 @@
             if (playerSpriteNum > 15) {
                 playerSpriteNum = 0
             }
-
         }
 
-        var playerImg = new Image();
-        playerImg.src = 'player.png'; //Sprite Image
 
         function playerMove() {
 
-            if (rightKeyPressed) {
+            if (rightKeyPressed && playerDxPos + PLAYER_S_WIDTH < canvas.width ) {
                 if (playerSpriteNum < 4 || playerSpriteNum > 7) {
                     playerSpriteNum = 4;
                 }
@@ -126,7 +153,7 @@
                 playerDxPos += playerXspeed;
             }
 
-            if (leftKeyPressed) {
+            if (leftKeyPressed && playerDxPos > 0 ) {
                 if (playerSpriteNum < 8 || playerSpriteNum > 11) {
                     playerSpriteNum = 8;
                 }
@@ -140,12 +167,36 @@
                 playerSpriteNum += aniFrameRate;
                 playerDyPos -= playerYspeed;
             }
-            if (downKeyPressed) {
+            if (downKeyPressed && playerDyPos + PLAYER_S_HEIGHT < canvas.height) {
                 if (playerSpriteNum < 0 || playerSpriteNum > 3) {
                     playerSpriteNum = 0;
                 }
                 playerSpriteNum += aniFrameRate;
                 playerDyPos += playerYspeed;
+            }
+            if (playerDyPos && playerDxPos > canvas.height){
+                    playerDyPos = startingPos;
+                    playerDxPos = startingPos;
+                }
+        
+            
+        }
+        
+      
+            
+        
+        function startPos(){
+            playerDxPos = canvas.width / 2.2;
+            playerDyPos = canvas.height / 1.1;
+        }
+        
+        function carMove(){
+            carDxpos += carXspeed;
+            if(carDxpos > canvas.width){
+               carDxpos = -150;
+               }
+            if(playerDxPos == carDxpos){
+                playerDxPos = startingPos;
             }
         }
 
