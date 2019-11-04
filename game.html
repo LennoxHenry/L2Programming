@@ -132,8 +132,10 @@
 
         var score = 0;
         var lives = 3;
+        
+        //Car Variable
 
-
+        var totalCars = 0;
 
         //Sprite Animation
 
@@ -252,14 +254,17 @@
                 if (score >= 5) {
                     maxSpeed = 15;
                     minSpeed = 8; //If score is between 5 and 9 the speed increases
+                    totalCars = 6;
                 }
                 if (score >= 10) {
                     maxSpeed = 20;
                     minSpeed = 10; // If score is between 10 and 19 the speed increases a lot
+                    totalCars = 9;
                 }
                 if (score >= 20) {
                     maxSpeed = 25;
                     minSpeed = 13; // If score is after 20 the speed greatly increases
+                    totalCars = 12;
                 }
 
 
