@@ -25,7 +25,8 @@
 
         } //difficulty prompt and variables that decide the difficulty of the game.
         var difficulty = '';
-        var totalCars = 0;
+        var playerXspeed = 0;
+        var playerYspeed = 0;
         var pass = false;
 
         while(pass == false){
@@ -36,20 +37,22 @@
         }
 
         if (difficulty == 'easy') { // Decides whether the amount of cars on whether it is hard or easy.
-            totalCars = 6;
+            playerXspeed = 4;
+            playerYspeed = 4;
         } else { //hard
-            totalCars = 12;
+            playerXspeed = 2;
+            playerYspeed = 2;
         }
 
-        console.log(totalCars)
+        console.log(playerXspeed)
 
 
         function mainloop() { // loop runs code 50 times per second 
             if (gameRun) {
 
                 colorRect(0, 0, canvas.width, canvas.height, 'black'); //background
-                drawImg(bgImg, 0, 0, 600, 800, 0, 0, canvas.width, canvas.height);
-                drawImg(playerImg, playerSxPos, playerSyPos, PLAYER_S_WIDTH, PLAYER_S_HEIGHT, playerDxPos, playerDyPos, playerDwidth, playerDheight);
+                drawImg(bgImg, 0, 0, 600, 800, 0, 0, canvas.width, canvas.height); //Draw Background Image
+                drawImg(playerImg, playerSxPos, playerSyPos, PLAYER_S_WIDTH, PLAYER_S_HEIGHT, playerDxPos, playerDyPos, playerDwidth, playerDheight); //Draw Player Image 
 
 
                 if (startingPos) {
@@ -67,8 +70,8 @@
                 carMove();
                 playerMove();
                 carDraw();
-                drawText('Score: ' + score, 17, 27, '30px Arial', 'black');
-                drawText('Lives: ' + lives, 480, 27, '30px Arial', 'black'); //Display for score and lives
+                drawText('Score: ' + score, 17, 27, '30px Arial', 'black'); //Display For Score
+                drawText('Lives: ' + lives, 480, 27, '30px Arial', 'black'); //Display For Lives
 
             } else {
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
@@ -80,8 +83,7 @@
         var playerXpos = 300;
         var playerYpos = 0;
         var playerSize = 20;
-        var playerXspeed = 4;
-        var playerYspeed = 4;
+        
 
         //Key Pressed Variables
         const LEFT_KEY = 37;
@@ -120,7 +122,9 @@
         var rowCount = 0;
         var playerSpriteNum = 0;
         var aniFrameRate = 0.1;
-
+        
+        //Game Run and Starting Position
+        
         var startingPos = 'true';
         var gameRun = 'true';
 
@@ -209,7 +213,7 @@
             playerDyPos = canvas.height / 1.1;
 
             for (i = 0; i < totalCars; i++) {
-                makeCar();
+                makeCar(); //Makes Cars
             }
 
 
@@ -289,6 +293,7 @@
 
             var carXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed); //Random Speed for the Cars
 
+                //Car Variables
             var car = {
                 carSxpos: carSxpos,
                 carSypos: carSypos,
@@ -363,7 +368,7 @@
 
         h1 {
             text-shadow: 3px 3px black;
-            color: ghostwhite;
+            color: ghostwhite; /* Title Text */
         }
 
     </style>
