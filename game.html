@@ -48,8 +48,8 @@
             if (gameRun) {
 
                 colorRect(0, 0, canvas.width, canvas.height, 'black'); //background
-                drawImg(bgImg, 0, 0, 600, 800, 0, 0, canvas.width, canvas.height);
-                drawImg(playerImg, playerSxPos, playerSyPos, PLAYER_S_WIDTH, PLAYER_S_HEIGHT, playerDxPos, playerDyPos, playerDwidth, playerDheight);
+                drawImg(bgImg, 0, 0, 600, 800, 0, 0, canvas.width, canvas.height); //Draw Background Image
+                drawImg(playerImg, playerSxPos, playerSyPos, PLAYER_S_WIDTH, PLAYER_S_HEIGHT, playerDxPos, playerDyPos, playerDwidth, playerDheight); //Draw Player Image 
 
 
                 if (startingPos) {
@@ -67,8 +67,8 @@
                 carMove();
                 playerMove();
                 carDraw();
-                drawText('Score: ' + score, 17, 27, '30px Arial', 'black');
-                drawText('Lives: ' + lives, 480, 27, '30px Arial', 'black'); //Display for score and lives
+                drawText('Score: ' + score, 17, 27, '30px Arial', 'black'); //Display For Score
+                drawText('Lives: ' + lives, 480, 27, '30px Arial', 'black'); //Display For Lives
 
             } else {
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
@@ -120,7 +120,9 @@
         var rowCount = 0;
         var playerSpriteNum = 0;
         var aniFrameRate = 0.1;
-
+        
+        //Game Run and Starting Position
+        
         var startingPos = 'true';
         var gameRun = 'true';
 
@@ -209,7 +211,7 @@
             playerDyPos = canvas.height / 1.1;
 
             for (i = 0; i < totalCars; i++) {
-                makeCar();
+                makeCar(); //Makes Cars
             }
 
 
@@ -289,6 +291,7 @@
 
             var carXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed); //Random Speed for the Cars
 
+                //Car Variables
             var car = {
                 carSxpos: carSxpos,
                 carSypos: carSypos,
@@ -363,7 +366,7 @@
 
         h1 {
             text-shadow: 3px 3px black;
-            color: ghostwhite;
+            color: ghostwhite; /* Title Text */
         }
 
     </style>
