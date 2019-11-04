@@ -23,22 +23,29 @@
             setInterval(mainloop, 1000 / 50);
 
 
+        } //difficulty prompt and variables that decide the difficulty of the game.
+        var difficulty = '';
+        var totalCars = 0;
+        var pass = false;
+
+        while(pass == false){
+            difficulty = prompt('What Difficulty Would You Like?', 'easy or hard');
+            if(difficulty == 'easy' || difficulty == 'hard'){
+               pass = true;
+            }
         }
-        //        var difficulty = prompt('Difficulty?', 'easy or hard?');
-        //
-        //        if (difficulty != 'easy' || difficulty != 'hard') {
-        //            var pass = false;
-        //            while (pass == false) {
-        //                difficulty = prompt('How hard?', 'easy')
-        //                if (difficulty == 'easy' || difficulty == 'hard') {
-        //                    pass = true;
-        //                }
-        //            }
-        //        }
+
+        if (difficulty == 'easy') { // 
+            totalCars = 6;
+        } else {
+            totalCars = 12;
+        }
+
+        console.log(totalCars)
+
 
         function mainloop() { // loop runs code 50 times per second 
             if (gameRun) {
-
 
                 colorRect(0, 0, canvas.width, canvas.height, 'black'); //background
                 drawImg(bgImg, 0, 0, 600, 800, 0, 0, canvas.width, canvas.height);
@@ -51,31 +58,32 @@
                 }
 
                 if (lives < 1) {
-                    gameRun = false;
+                    gameRun = false; //Game Over when lives are all gone
                 }
+
 
 
                 playerAnimation();
                 carMove();
                 playerMove();
                 carDraw();
-                drawText('Score: ' + score, 17, 27, '30px Arial', 'black')
-                drawText('Lives: ' + lives, 480, 27, '30px Arial', 'black')
+                drawText('Score: ' + score, 17, 27, '30px Arial', 'black');
+                drawText('Lives: ' + lives, 480, 27, '30px Arial', 'black'); //Display for score and lives
 
             } else {
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-                drawText('Gave Over, Final Score:' + score, canvas.width / 2, canvas.height / 2, 27, '50px Arial', 'white')
+                drawText('Gave Over, Final Score: ' + score, canvas.width / 3, canvas.height / 2, '20px Arial', 'white') // Game Over Screen
             }
         }
 
-        //Player Variable 
+        //Player Variables 
         var playerXpos = 300;
         var playerYpos = 0;
         var playerSize = 20;
         var playerXspeed = 4;
         var playerYspeed = 4;
 
-
+        //Key Pressed Variables
         const LEFT_KEY = 37;
         const UP_KEY = 38;
         const RIGHT_KEY = 39;
@@ -88,10 +96,10 @@
         //Image Sources and Variables
 
         var playerImg = new Image();
-        playerImg.src = 'player.png'; //Sprite Image
+        playerImg.src = 'player.png'; //Player Spritesheet
 
         var bgImg = new Image();
-        bgImg.src = 'Road.png'; //BG Image
+        bgImg.src = 'Road.png'; //Background Image
 
         var carImg = new Image();
         carImg.src = 'car.png'; //Car Sprite Image
@@ -123,13 +131,13 @@
 
 
 
-
+        //Sprite Animation
 
         for (i = 0; i < PLAYER_SPRITES; i++) {
-            playerSpriteArray[i] = new Array(2);
+            playerSpriteArray[i] = new Array(2); // Array for the sprite sheet.
 
             playerSpriteArray[i][0] = PLAYER_S_WIDTH * (i % 4);
-            //console.log(playerSpriteArray[i][0]);
+
 
             if (i != 0 && i % 4 == 0) {
                 rowCount++;
@@ -152,10 +160,10 @@
         }
 
 
-        function playerMove() {
+        function playerMove() { //Controls
 
             if (rightKeyPressed && playerDxPos + PLAYER_S_WIDTH < canvas.width) {
-                if (playerSpriteNum < 4 || playerSpriteNum > 7) {
+                if (playerSpriteNum < 4 || playerSpriteNum > 7) { //Right Key Control and Right Sprite Animation
                     playerSpriteNum = 4;
                 }
                 playerSpriteNum += aniFrameRate;
@@ -163,53 +171,55 @@
             }
 
             if (leftKeyPressed && playerDxPos > 0) {
-                if (playerSpriteNum < 8 || playerSpriteNum > 11) {
+                if (playerSpriteNum < 8 || playerSpriteNum > 11) { //Left Key Control and Left Sprite Animation
                     playerSpriteNum = 8;
                 }
                 playerSpriteNum += aniFrameRate;
                 playerDxPos -= playerXspeed;
             }
             if (upKeyPressed) {
-                if (playerSpriteNum < 12 || playerSpriteNum > 15) {
+                if (playerSpriteNum < 12 || playerSpriteNum > 15) { //Up Key Control and Up Sprite Animation
                     playerSpriteNum = 12;
                 }
                 playerSpriteNum += aniFrameRate;
                 playerDyPos -= playerYspeed;
                 if (playerDyPos <= 0) {
-                    playerDyPos = canvas.height - playerDheight;
+                    playerDyPos = canvas.height - playerDheight; // Increases score when the character gets past the obstacles
                     score++;
                 }
             }
             if (downKeyPressed && playerDyPos + PLAYER_S_HEIGHT < canvas.height) {
-                if (playerSpriteNum < 0 || playerSpriteNum > 3) {
+                if (playerSpriteNum < 0 || playerSpriteNum > 3) { //Down Key Control and Down Sprite Animation
                     playerSpriteNum = 0;
                 }
                 playerSpriteNum += aniFrameRate;
                 playerDyPos += playerYspeed;
             }
-            if (playerDyPos && playerDxPos > canvas.height) {
+            if (playerDyPos && playerDxPos > canvas.height) { //Puts Player back at the bottom of the screen after he goes to the top
                 playerDyPos = startingPos;
                 playerDxPos = startingPos;
             }
         }
 
 
-        var totalCars = 6;
+     
 
         function startPos() {
-            playerDxPos = canvas.width / 2.2;
+            playerDxPos = canvas.width / 2.2; //Starting Position
             playerDyPos = canvas.height / 1.1;
 
             for (i = 0; i < totalCars; i++) {
                 makeCar();
             }
+
+
         }
 
 
 
         function carDraw() {
             cars.forEach(function(car, i) {
-                drawImg(carImg, car.carSxpos, car.carSypos, car.CAR_S_WIDTH, car.CAR_S_HEIGHT, car.carDxpos, car.carDypos, car.carDwidth, car.carDheight);
+                drawImg(carImg, car.carSxpos, car.carSypos, car.CAR_S_WIDTH, car.CAR_S_HEIGHT, car.carDxpos, car.carDypos, car.carDwidth, car.carDheight); //Draws the Cars
             });
         }
 
@@ -221,7 +231,7 @@
                 if (car.carDxpos > canvas.width) {
                     car.carDxpos = 0 - car.carDwidth;
                     var carLane = Math.floor(Math.random() * 6) + 1;
-                    console.log(carLane);
+//                    console.log(carLane);
                     if (carLane == 1) {
                         car.carDypos = carLane * (car.carDheight * 2.5);
                     } else {
@@ -229,11 +239,26 @@
                     }
                     car.carXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed);
                 }
-                
+
                 if (car.carDypos + car.carDheight > playerDyPos && car.carDypos < playerDyPos + playerDheight && car.carDxpos + car.carDwidth > playerDxPos && car.carDxpos < playerDxPos + playerDwidth) {
                     playerDyPos = canvas.height - playerDheight;
                     lives--;
                 }
+
+                if (score >= 5) {
+                    maxSpeed = 15;
+                    minSpeed = 8; //If score is between 5 and 9 the speed increases
+                }
+                if (score >= 10) {
+                    maxSpeed = 20;
+                    minSpeed = 10; // If score is between 10 and 19 the speed increases a lot
+                }
+                if (score >= 20) {
+                    maxSpeed = 25;
+                    minSpeed = 13; // If score is after 20 the speed greatly increases
+                }
+
+
             })
         }
 
@@ -245,7 +270,7 @@
         var maxSpeed = 12;
         var minSpeed = 5;
 
-        function makeCar() {
+        function makeCar() { //Car Lane Function that spaces the cars out and creates the cars themselves
             const CAR_SPACE = 110;
             var carLane = Math.floor(Math.random() * 6) + 1;
             var carSxpos = 0;
@@ -262,7 +287,7 @@
                 carDypos = carLane * CAR_SPACE - CAR_SPACE - CAR_SPACE / 3;
             }
 
-            var carXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed);
+            var carXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed); //Random Speed for the Cars
 
             var car = {
                 carSxpos: carSxpos,
@@ -311,26 +336,29 @@
         }
 
         function drawImg(img, sx, sy, sw, sh, dx, dy, dw, dh) {
-            canvasContext.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+            canvasContext.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh); //Draws Images
         }
 
         function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
-            canvasContext.fillRect(x, y, w, h);
+            canvasContext.fillRect(x, y, w, h); //Color Rect fucntion
         }
 
         function drawText(msg, x, y, f, c) {
             canvasContext.fillStyle = c;
             canvasContext.font = f;
-            canvasContext.fillText(msg, x, y);
+            canvasContext.fillText(msg, x, y); // Draws Text like the score and lives
         }
 
     </script>
+
+    <button> <a href='game.html'>Restart</a> </button>
 
     <style>
         html {
             background-color: lightcyan;
             font-family: sans-serif;
+            /* Background Color for everything around the game */
         }
 
         h1 {
