@@ -25,7 +25,9 @@
 
         } //difficulty prompt and variables that decide the difficulty of the game.
         var difficulty = '';
-        var totalCars = 0;
+        var username = '';
+        var playerXspeed = 0;
+        var playerYspeed = 0;
         var pass = false;
 
         while(pass == false){
@@ -33,15 +35,24 @@
             if(difficulty == 'easy' || difficulty == 'hard'){
                pass = true;
             }
+            if(difficulty == null){
+                pass = false;
+            }
+        username = prompt('What is your Username?', 'John Doe');
+            if(username == null){
+                pass = false;
+            }
         }
 
         if (difficulty == 'easy') { // Decides whether the amount of cars on whether it is hard or easy.
-            totalCars = 6;
+            playerXspeed = 4;
+            playerYspeed = 4;
         } else { //hard
-            totalCars = 12;
+            playerXspeed = 2;
+            playerYspeed = 2;
         }
 
-        console.log(totalCars)
+        console.log(playerXspeed)
 
 
         function mainloop() { // loop runs code 50 times per second 
@@ -72,7 +83,7 @@
 
             } else {
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-                drawText('Gave Over, Final Score: ' + score, canvas.width / 3, canvas.height / 2, '20px Arial', 'white') // Game Over Screen
+                drawText(username + ', Sorry but Game Over, Final Score: ' + score, canvas.width / 4, canvas.height / 2, '20px Arial', 'white') // Game Over Screen
             }
         }
 
@@ -80,8 +91,7 @@
         var playerXpos = 300;
         var playerYpos = 0;
         var playerSize = 20;
-        var playerXspeed = 4;
-        var playerYspeed = 4;
+        
 
         //Key Pressed Variables
         const LEFT_KEY = 37;
@@ -130,8 +140,10 @@
 
         var score = 0;
         var lives = 3;
+        
+        //Car Variable
 
-
+        var totalCars = 6;
 
         //Sprite Animation
 
@@ -250,14 +262,17 @@
                 if (score >= 5) {
                     maxSpeed = 15;
                     minSpeed = 8; //If score is between 5 and 9 the speed increases
+                    totalCars = 8;
                 }
                 if (score >= 10) {
                     maxSpeed = 20;
                     minSpeed = 10; // If score is between 10 and 19 the speed increases a lot
+                    totalCars = 10;
                 }
                 if (score >= 20) {
                     maxSpeed = 25;
                     minSpeed = 13; // If score is after 20 the speed greatly increases
+                    totalCars = 12;
                 }
 
 
